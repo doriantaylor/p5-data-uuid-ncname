@@ -53,7 +53,7 @@ is($z32, 'Aaaaaaaaaaaaaaaaaaaaaaaaaa', 'Null32 UUID OK');
 my $f64 = to_ncname_64('ffffffff-ffff-ffff-ffff-ffffffffffff');
 my $f32 = to_ncname_32('ffffffff-ffff-ffff-ffff-ffffffffffff');
 
-diag('E' . MIME::Base64::encode_base64url(pack 'C*', (255) x 15, 15 << 2));
+#diag('E' . MIME::Base64::encode_base64url(pack 'C*', (255) x 15, 15 << 2));
 
 is($f64, 'P____________________P',     'FF64 UUID OK');
 is($f32, 'P777777777777777777777777p', 'FF32 UUID OK');
@@ -107,5 +107,5 @@ sub mooltipass {
 
 }
 
-diag(to_ncname('00000000-0000-4000-0000-00000000000f'));
-diag(from_ncname('EAAAAAAAAAAAAAAAAAAAAP'));
+#diag(to_ncname('00000000-0000-4000-0000-00000000000f'));
+#diag(from_ncname('EAAAAAAAAAAAAAAAAAAAAP'));
