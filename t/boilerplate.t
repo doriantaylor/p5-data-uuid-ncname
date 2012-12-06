@@ -49,7 +49,7 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/UUID/NCName.pm');
+  module_boilerplate_ok('lib/Data/UUID/NCName.pm');
 
 
 }

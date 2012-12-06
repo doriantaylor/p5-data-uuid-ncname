@@ -389,7 +389,7 @@ The function will return C<undef> immediately if it cannot match
 either of these patterns. Input past the 21-character mark (for
 Base64) or 25-character mark (for Base32) is ignored.
 
-This function returns a UUID of type C<$FORMAT>, which if not left
+This function returns a UUID of type C<$FORMAT>, which if left
 undefined, must be one of the following:
 
 =over 4
