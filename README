@@ -91,7 +91,7 @@ APPLICATIONS
 
     Generated symbols
             There are only two hard things in computer science: cache
-            invalidation, naming things [and off-by-one errors].
+            invalidation and naming things [and off-by-one errors].
 
             -- Phil Karlton [extension of unknown origin]
 
@@ -106,8 +106,8 @@ APPLICATIONS
         conventional packages of programs, libraries and frameworks. The
         Base32 UUID NCName representation should be adequate for placeholder
         symbols in just about any programming language, save for those which
-        do not permit identifiers as long as 26 characters (of which there
-        are few).
+        do not permit identifiers as long as 26 characters (which are
+        extremely scarce).
 
 EXPORT
     No subroutines are exported by default. Be sure to include at least one
@@ -147,8 +147,8 @@ SUBROUTINES
     of these patterns. Input past the 21-character mark (for Base64) or
     25-character mark (for Base32) is ignored.
 
-    This function returns a UUID of type `$FORMAT', which if not left
-    undefined, must be one of the following:
+    This function returns a UUID of type `$FORMAT', which if left undefined,
+    must be one of the following:
 
     str The canonical UUID format, like so:
         `33fcc995-5d10-477e-a9b4-c9cc405bbf04'. This is the default.

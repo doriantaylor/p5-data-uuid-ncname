@@ -140,7 +140,7 @@ C<[A-Za-z][0-9A-Za-z]*>.
 =over 4
 
 There are only two hard things in computer science: cache
-invalidation, naming things [and off-by-one errors].
+invalidation and naming things [and off-by-one errors].
 
 -- Phil Karlton [extension of unknown origin]
 
@@ -158,7 +158,7 @@ other languages, or transplanted into the more conventional packages
 of programs, libraries and frameworks. The Base32 UUID NCName
 representation should be adequate for placeholder symbols in just
 about any programming language, save for those which do not permit
-identifiers as long as 26 characters (of which there are few).
+identifiers as long as 26 characters (which are extremely scarce).
 
 =back
 
