@@ -262,23 +262,6 @@ my %DECODE = (
     },
 );
 
-sub _reassemble {
-    my $list = shift;
-
-    my @new;
-    for my $i (0..$#$list) {
-        my $j = int($i/2);
-        if ($i % 2) {
-            $new[$j] |= ($list->[$i] << 4);
-        }
-        else {
-            $new[$j] = $list->[$i];
-        }
-    }
-
-    pack 'C*', @new;
-}
-
 sub _bin_uuid_to_pair {
     my $data = shift;
     my @list = unpack 'N4', $data;
@@ -309,62 +292,6 @@ sub _pair_to_bin_uuid {
     #warn unpack 'H*', pack 'N4', @list;
 
     pack 'N4', @list;
-}
-
-sub _derp {
-#sub _bin_uuid_to_pair {
-    my $data = shift;
-
-    warn _foo($data);
-    # this seems to do the right thing
-    # warn unpack 'H*', $data;
-
-    # XXX could probably do this whole thing with some bit-shifting
-    # three-card monte but i don't really feel up to it.
-
-    # vec tries to be clever for <= 4-bit chunks, so the nybbles of
-    # each byte come out flipped around.
-    my @list = map { vec($data, $_, 4) } (0..31);
-
-    # zero-pad the list, because i'm about to...
-    splice @list, 31, 0, 0;
-
-    # ...pull out the version.
-    my $ver = splice @list, 13, 1;
-
-    #warn join('-', @list);
-
-    # rebuild as octets
-    my $out = _reassemble(\@list);
-
-    # yup
-    # warn unpack 'H*', $out;
-
-    # this should be an integer and a binary string
-    return ($ver, $out);
-}
-
-sub _durr {
-#sub _pair_to_bin_uuid {
-    my ($ver, $data) = @_;
-
-    #warn unpack 'H*', $data;
-
-    # the version should be between 0 and 15.
-    $ver &= 15;
-
-    my @list = map { vec($data, $_, 4) } (0..31);
-    # get rid of the second-to-last quartet
-    splice @list, 30, 1;
-    # put the version back
-    splice @list, 13, 0, $ver;
-
-    #warn join('-', @list);
-
-    # remove any accumulated overhang
-    @list = @list[0..31];
-
-    _reassemble(\@list);
 }
 
 sub _encode_version {
