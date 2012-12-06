@@ -142,7 +142,7 @@ C<[A-Za-z][0-9A-Za-z]*>.
 There are only two hard things in computer science: cache
 invalidation, naming things [and off-by-one errors].
 
-E<mdash>Phil Karlton [extension of unknown origin]
+-- Phil Karlton [extension of unknown origin]
 
 =back
 
