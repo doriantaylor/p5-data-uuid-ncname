@@ -1,6 +1,6 @@
-package UUID::NCName;
+package Data::UUID::NCName;
 
-use 5.08;
+use 5.008;
 use strict;
 use warnings FATAL => 'all';
 
@@ -12,7 +12,7 @@ use base qw(Exporter);
 
 =head1 NAME
 
-UUID::NCName - It's a UUID, AND it's an NCName!
+Data::UUID::NCName - It's a UUID, AND it's an NCName!
 
 =head1 VERSION
 
@@ -24,7 +24,7 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-    use UUID::NCName qw(:all);
+    use Data::UUID::NCName qw(:all);
 
     my $uuid = '1ff916f3-6ed7-443a-bef5-f4c85f18cd10';
     my $ncn  = to_ncname($uuid);
@@ -121,6 +121,7 @@ our %EXPORT_TAGS = (
     encode => [qw(to_ncname to_ncname_32 to_ncname_64)],
     32     => [qw(to_ncname_32 from_ncname_32)],
     64     => [qw(to_ncname_64 from_ncname_64)],
+);
 
 # export nothing by default
 our @EXPORT = ();
@@ -135,7 +136,7 @@ my $UUF = sprintf('%s-%s-%s-%s-%s', '%02x' x 4, ('%02x' x 2) x 3, '%02x' x 6);
 
 my %ENCODE = (
     32 => sub {
-        my $out = MIME::Base32::encode(shift);
+        my $out = MIME::Base32::encode_rfc3548(shift);
 
         # we want lower case because IT IS RUDE TO SHOUT
         lc substr($out, 0, 25);
@@ -152,15 +153,18 @@ my %ENCODE = (
 my %DECODE = (
     32 => sub {
         my $in = shift;
-        $in = substr($in, 0, 25) . '0';
+        $in = uc substr($in, 0, 25) . '0';
 
-        MIME::Base32::decode($in);
+        MIME::Base32::decode_rfc3548($in);
     },
     64 => sub {
         my $in = shift;
+        #warn $in;
         $in = substr($in, 0, 21) . 'A==';
         # note that the rfc4648 sequence ends in +/ or -_
         $in =~ tr!-_!+/!;
+
+        #warn unpack 'H*', MIME::Base64::decode($in);
 
         MIME::Base64::decode($in);
     },
@@ -186,6 +190,9 @@ sub _reassemble {
 sub _bin_uuid_to_pair {
     my $data = shift;
 
+    # this seems to do the right thing
+    # warn unpack 'H*', $data;
+
     # XXX could probably do this whole thing with some bit-shifting
     # three-card monte but i don't really feel up to it.
 
@@ -199,8 +206,13 @@ sub _bin_uuid_to_pair {
     # ...pull out the version.
     my $ver = splice @list, 13, 1;
 
+    warn join('-', @list);
+
     # rebuild as octets
     my $out = _reassemble(\@list);
+
+    # yup
+    # warn unpack 'H*', $out;
 
     # this should be an integer and a binary string
     return ($ver, $out);
@@ -209,12 +221,18 @@ sub _bin_uuid_to_pair {
 sub _pair_to_bin_uuid {
     my ($ver, $data) = @_;
 
+    #warn unpack 'H*', $data;
+
     # the version should be between 0 and 15.
-    $ver &= ~15;
+    $ver &= 15;
 
     my @list = map { vec($data, $_, 4) } (0..31);
+    # get rid of the second-to-last quartet
+    splice @list, 30, 1;
     # put the version back
     splice @list, 13, 0, $ver;
+
+    #warn join('-', @list);
 
     # remove any accumulated overhang
     @list = @list[0..31];
@@ -223,7 +241,7 @@ sub _pair_to_bin_uuid {
 }
 
 sub _encode_version {
-    my $ver = shift & ~15;
+    my $ver = $_[0] & 15;
     # A (0) starts at 65. this should never be higher than F (version
     # 5) for a valid UUID, but even an invalid one will never be
     # higher than P (15).
@@ -234,7 +252,7 @@ sub _encode_version {
 
 sub _decode_version {
     # modulo makes sure this always returns between 0 and 15
-    (ord(uc shift) - 65) % 16;
+    return((ord(uc $_[0]) - 65) % 16);
 }
 
 =head1 SUBROUTINES
@@ -273,7 +291,8 @@ sub to_ncname {
 
         # handle hexadecimal
         if ($uuid =~ /^[0-9A-Fa-f-]{32,}$/) {
-            $uuid =~ tr/-//;
+            $uuid =~ s/-//g;
+            #warn $uuid;
             $bin = pack 'H*', $uuid;
         }
         # handle base64
@@ -290,6 +309,7 @@ sub to_ncname {
 
     # extract the version
     my ($version, $content) = _bin_uuid_to_pair($bin);
+    #warn $version;
 
     # wah-lah.
     _encode_version($version) . $ENCODE{$radix}->($content);
@@ -402,7 +422,9 @@ sub from_ncname {
 
     # get this stuff back to canonical form
     $version = _decode_version($version);
+    # warn $version;
     $content = $DECODE{$radix}->($content);
+    # warn  unpack 'H*', $content;
 
     # reassemble the pair
     my $bin = _pair_to_bin_uuid($version, $content);
@@ -467,7 +489,7 @@ your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc UUID::NCName
+    perldoc Data::UUID::NCName
 
 You can also look for information at:
 
@@ -530,4 +552,4 @@ permissions and limitations under the License.
 
 =cut
 
-1; # End of UUID::NCName
+1; # End of Data::UUID::NCName
