@@ -12,7 +12,7 @@ use base qw(Exporter);
 
 =head1 NAME
 
-Data::UUID::NCName - It's a UUID, AND it's an NCName!
+Data::UUID::NCName - Make valid NCName tokens which are also UUIDs
 
 =head1 VERSION
 
@@ -28,6 +28,8 @@ our $VERSION = '0.01';
 
     my $uuid = '1ff916f3-6ed7-443a-bef5-f4c85f18cd10';
     my $ncn  = to_ncname($uuid);
+
+    # $ncn is now "EH_kW827XQ6vvX0yF8YzRA".
 
     # from Test::More, this will output 'ok':
     is(from_ncname($ncn), $uuid, 'Decoding result matches original');
