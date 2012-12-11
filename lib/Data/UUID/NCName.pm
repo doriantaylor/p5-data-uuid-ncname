@@ -16,11 +16,11 @@ Data::UUID::NCName - Make valid NCName tokens which are also UUIDs
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -598,8 +598,8 @@ Datatypes|http://www.w3.org/TR/xmlschema11-2/#ID> (ID)
 =back
 
 This module lives under the C<Data::> namespace for the purpose of
-hygiene. It I<does not> depend on L<Data::UUID> or any other UUID
-modules.
+namespace hygiene. It I<does not> depend on L<Data::UUID> or any
+other UUID modules.
 
 =head1 LICENSE AND COPYRIGHT
 

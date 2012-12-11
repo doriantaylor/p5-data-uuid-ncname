@@ -10,6 +10,7 @@ requires 'MIME::Base64';
 requires 'MIME::Base32';
 
 build_requires 'Test::More';
+test_requires 'Data::UUID';
 
 auto_install;
 
