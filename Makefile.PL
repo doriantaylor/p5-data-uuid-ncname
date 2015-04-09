@@ -8,9 +8,12 @@ license  'apache';
 
 requires 'MIME::Base64';
 requires 'MIME::Base32';
+requires 'UUID::Tiny';
 
 build_requires 'Test::More';
 test_requires 'Data::UUID';
+
+install_script 'script/uuid-ncname';
 
 auto_install;
 
