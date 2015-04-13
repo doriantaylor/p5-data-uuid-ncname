@@ -42,7 +42,7 @@ use warnings FATAL => 'all';
 use Data::UUID::NCName ();
 use UUID::Tiny         ();
 use Getopt::Long       ();
-use Pod::Usage         ();
+#use Pod::Usage         ();
 use Carp               ();
 
 Getopt::Long::Configure(qw(bundling no_ignore_case));
@@ -65,7 +65,10 @@ Getopt::Long::GetOptions(
     'h|help'         => \$p{help},
 );
 
-exit Pod::Usage::pod2usage(0) if $p{help};
+if ($p{help}) {
+    require Pod::Usage;
+    exit Pod::Usage::pod2usage(0);
+} #if $p{help};
 
 my @input;
 

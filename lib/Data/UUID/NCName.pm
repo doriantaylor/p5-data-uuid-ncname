@@ -349,7 +349,8 @@ sub to_ncname {
         $uuid =~ s/\s+//g;
 
         # handle hexadecimal
-        if ($uuid =~ /^[0-9A-Fa-f-]{32,}$/) {
+        if ($uuid =~ /^(?i:urn:uuid:)?[0-9A-Fa-f-]{32,}$/) {
+            $uuid =~ s/^urn:uuid://i;
             $uuid =~ s/-//g;
             #warn $uuid;
             $bin = pack 'H*', $uuid;
