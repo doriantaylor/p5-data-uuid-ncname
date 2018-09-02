@@ -3,3 +3,5 @@
 \.git
 .*\.bak
 ^Makefile$
+^MYMETA.json$
+^MYMETA.yml$
